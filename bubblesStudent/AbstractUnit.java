@@ -46,6 +46,11 @@ double bubblesize;
    
    }
    
-   public 
+   public int getSide()
+   {
+   
+   
+      return 0;
+   }
 
 }
