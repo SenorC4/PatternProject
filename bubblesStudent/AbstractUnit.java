@@ -1,69 +1,56 @@
-import javafx.event.*;
-import javafx.stage.*;
-import javafx.scene.canvas.*;
-import javafx.scene.paint.*;
-import javafx.scene.*;
-import javafx.scene.text.*;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
-import javafx.animation.*;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.geometry.*;
-import javafx.application.Application;
-import java.io.*;
-import java.util.*;
-import java.text.*;
+/*type1 30 1.0 4 
+health 0 5 10 5 
+health 0 -5 10 8 
+bubble 0 10 1 5 3 2 2 100 5 
+bubble 0 -10 1 5 .5 10 .1 150 2.5
 
-public abstract class AbstractUnit extends GameObject{
-   
-   protected AbstractUnit next;
-   String name;
-   public boolean selected = false;
-   public AbstractUnit(float x, float y, float radius, int playerSide){
-      super(x, y, radius);
-   
-      side=playerSide;
-   }
-   //Gets the position
-   public Vector2 getPosition(){
-      return returnVector;
-   }
-   //Needed for singleton fun probably :))))
-   public String getName()
+type2 15 .5 2 
+health 10 0 5 10 
+health -10 0 5 10*/
+
+//Each part of the above is the decorsator for the respective unit.
+public class AbstractUnit{
+String type; //type 1 is red player? type 2 is blue player?
+
+String name;
+double radius;
+double speed;
+int attributenumber; //Is how many attributes are next to read.
+//Attribute has a number, type, posx, posy, radius before the next attribute in the text file. 
+String health;
+double healthx;
+double healthy;
+double hp;
+double healthradius;
+String bubble;
+double bubblex;
+double bubbley;
+int bubbletype;
+//This is for the decorator
+int decoratorbubblesize;
+//end prev comment here
+double bubbledamage;
+double bubblespeed;
+double refiredelay;
+int bubblerange;
+//Actual size of the projectiles
+double bubblesize; 
+
+
+
+
+   public AbstractUnit()
    {
-      return name;
+   
+   
+   
    }
-   //Sets the next thing for recursion?
-   public void setNext(AbstractUnit input)
+   
+   public int getSide()
    {
-      next=input;
    
+   
+      return 0;
    }
-   //gets the next thing
-   public AbstractUnit getNext()
-   {
-      
-      return next;
-      
-   }
-   
-   public void Select(){
-      selected = true;
-   
-   }
-   
-   public void Deselect(){
-      selected = false;
-   
-   }
-   
-   public abstract void move(float xR, float yR, float x, float y);
-   
-   public abstract void draw(GraphicsContext gc);
-   //public abstract void run();
-   
-   //public abstract AbstractUnit create(AbstractUnit next);
-   
-   
+
 }
