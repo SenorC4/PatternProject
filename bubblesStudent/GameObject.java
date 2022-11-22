@@ -33,6 +33,7 @@ public abstract class GameObject
       this.y = y;
       this.radius = radius;
       radiusSquared = radius*radius;
+      //side=playerSide;
    }
     
    //base draw method. I tried to be helpful so it would give you a nice little warning if you use it accidently (AKA without overriding it)
@@ -43,9 +44,9 @@ public abstract class GameObject
    }
    
    //probably want to uncomment this, but the sample code would not compile unless I commented this out since I'm not giving you that class.
-   public void run(ArrayList<AbstractUnit> units)
+   public void run(float NotNeededHere)
    {
-   
+      
    }
    
    public abstract Vector2 getPosition();
