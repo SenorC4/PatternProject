@@ -1,5 +1,3 @@
-
-
 import javafx.event.*;
 import javafx.stage.*;
 import javafx.scene.canvas.*;
@@ -41,6 +39,12 @@ public class Main extends Application
    
    Game theGame = new Game();
 
+   public boolean selectable = false;
+   public boolean movable = false;
+   Unit selected = null;
+   AbstractUnit selectedStart = null;
+   
+   
    static double deltaTime; 
    
    //get the amount of time passed between the last frame and this frame.
@@ -61,7 +65,7 @@ public class Main extends Application
       Label title = new Label("Bubble Poppers 3000");
       title.setFont(Font.font ("Verdana", 34));
       
-      Label subtitle = new Label("Here *they* comes!");
+      Label subtitle = new Label("Here *they* come!");
       subtitle.setFont(Font.font ("Verdana", 18));
    
       Label spacer1 = new Label(" ");
@@ -142,14 +146,15 @@ public class Main extends Application
       {
           if (event.getCode() == KeyCode.Z) 
           {
-          }
-          if(event.getCode() == KeyCode.X)
-          {
-            
+            selectable = true;
+            movable = false;
+            //System.out.println("Selectable");
           }
           if(event.getCode() == KeyCode.C)
           {
-            
+            movable = true;
+            selectable = false;
+            //System.out.println("Movable");
           }
       }
    }
@@ -161,11 +166,110 @@ public class Main extends Application
    {
       public void handle(MouseEvent me) 
       {
-         int x = (int) me.getX();
-         int y = (int) me.getY();
+         float x = (int) me.getX();
+         float y = (int) me.getY();
          
          //maybe do something here on a click depending on what command is active?
          
+         
+         
+         //made for translating
+         Map theMap = theGame.getMap();
+         
+         
+         
+         //if z has been clicked
+         if(selectable){
+            //System.out.println(x + " " + y);
+            
+            //list of arrays of units and decorators
+            ArrayList<AbstractUnit[]> completedUnits = theGame.getUnits();
+            
+            //iterate through units
+            for(int i = 0; i < completedUnits.size(); i++){
+            
+            
+              AbstractUnit[] thisUnit = completedUnits.get(i);
+              
+              
+              Deselect des = new Deselect((thisUnit[0]));
+              des.execute();
+
+           
+               //Unit is the last index of array, get unTranslated x and y
+               float unitX = thisUnit[thisUnit.length-1].getPosition().getX();
+               float unitY = thisUnit[thisUnit.length-1].getPosition().getY();
+               
+               //translate them
+               unitX += (800-theMap.getXSize())/2;
+               unitY += (600 - theMap.getYSize())/2;
+               
+               //System.out.println(unitX + " " + unitY);
+               
+               //radius used for collision
+               float unitRad = ((Unit) thisUnit[thisUnit.length-1]).getRad();
+               
+                              
+               //if mouse over unit, select the unit and grab the bubble that starts the recursion
+               if(x > unitX - unitRad && x < unitX + unitRad){
+                  if(y > unitY - unitRad && y < unitY +unitRad){
+                     selectedStart = thisUnit[0];
+                     selected = (Unit)thisUnit[thisUnit.length-1];
+                     Select sel = new Select(selectedStart);
+                     sel.execute();
+                     
+                  }
+               }
+               
+               
+               
+            }
+            
+            for(int i = 0; i < completedUnits.size(); i++){
+               
+               AbstractUnit[] checkUnit = completedUnits.get(i);
+               
+               if(checkUnit[checkUnit.length-1] != selected){
+                  Deselect des1 = new Deselect((checkUnit[0]));
+                  des1.execute();
+               }
+            
+            }
+               
+         
+         }
+         
+         //if c has been clicked
+         if(movable && selectedStart != null && selected != null){
+         
+            
+            //moods code
+            float unitX = selected.getPosition().getX();
+            float unitY = selected.getPosition().getY();
+            
+            //translate them
+            //unitX += (800-theMap.getXSize())/2;
+            //unitY += (600 - theMap.getYSize())/2;
+            
+         
+            
+            
+            x += (theMap.getXSize()- 800)/2;
+            y += (theMap.getYSize()- 600)/2;
+            
+            float diffx = x - unitX;
+            float diffy = y - unitY;
+                
+            double mag = Math.sqrt(diffx*diffx + diffy*diffy);
+                
+            diffx /= mag;
+            diffy /= mag;
+            
+            Move moveUnit = new Move(selectedStart, diffx, diffy, x, y);
+            moveUnit.execute();
+            
+
+         } 
       }   
    }
 }
